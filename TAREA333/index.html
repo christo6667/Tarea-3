@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+
+<meta charset="utf-8">
+
+<title>Grafico de Barras 3D</title>
+
+
+<style>
+
+body{
+    background:#3f4146;
+    font-family:Arial;
+}
+
+
+.contenedor{
+
+    background:white;
+    width:750px;
+    margin:30px auto;
+    padding:20px;
+    border-radius:15px;
+    text-align:center;
+
+}
+
+
+canvas{
+
+    background:white;
+    border:2px solid black;
+    border-radius:10px;
+
+}
+
+
+textarea{
+
+    width:90%;
+    height:120px;
+    border-radius:10px;
+    padding:10px;
+
+}
+
+
+button{
+
+    padding:10px 25px;
+    margin:10px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+
+}
+
+
+</style>
+
+
+</head>
+
+
+
+<body>
+
+
+
+
+<div class="contenedor">
+
+
+
+<h1>
+Grafico de Barras 3D
+</h1>
+
+
+
+<h5>
+
+Hola para graficar tus barras por favor introduce lo que quieres representar más la cantidad.
+
+<br><br>
+
+Ejemplo: manzanas,50. naranjas,30.
+
+
+
+
+
+
+
+
+
+
+
+
+<textarea id="datos">
+
+manzanas,50
+naranjas,30
+uvas,80
+
+</textarea>
+
+
+
+
+
+<br>
+
+
+
+
+
+<button onclick="dibujar()">
+
+Graficar
+
+</button>
+
+
+
+
+
+<br>
+
+
+
+
+
+<canvas 
+id="canvas"
+width="700"
+height="500">
+
+</canvas>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+<script>
+
+
+
+function dibujar(){
+
+
+
+let canvas =
+document.getElementById("canvas");
+
+
+
+let ctx =
+canvas.getContext("2d");
+
+
+
+
+
+ctx.clearRect(
+0,
+0,
+700,
+500
+);
+
+
+
+
+
+
+let texto =
+document.getElementById("datos").value;
+
+
+
+
+
+let datos =
+texto
+.trim()
+.split("\n")
+.map(linea=>{
+
+
+let partes =
+linea.split(",");
+
+
+
+return {
+
+
+nombre:partes[0],
+valor:Number(partes[1])
+
+
+};
+
+
+});
+
+
+
+
+
+
+let max =
+Math.max(
+...datos.map(d=>d.valor)
+);
+
+
+
+
+
+
+datos.forEach(
+(d,i)=>{
+
+
+
+
+
+let y =
+80+i*100;
+
+
+
+
+
+let x =
+170;
+
+
+
+
+
+let alto =
+50;
+
+
+
+
+
+let ancho =
+(d.valor/max)*450;
+
+
+
+
+
+
+
+// nombre
+
+
+ctx.fillStyle="black";
+
+ctx.font="20px Arial";
+
+
+ctx.fillText(
+d.nombre,
+20,
+y+35
+);
+
+
+
+
+
+
+
+
+// parte inferior 3D
+
+
+ctx.fillStyle="#777";
+
+
+
+ctx.beginPath();
+
+
+ctx.moveTo(
+x,
+y+alto
+);
+
+
+ctx.lineTo(
+x+ancho,
+y+alto
+);
+
+
+ctx.lineTo(
+x+ancho+20,
+y+alto+20
+);
+
+
+ctx.lineTo(
+x+20,
+y+alto+20
+);
+
+
+ctx.closePath();
+
+
+ctx.fill();
+
+
+
+
+
+
+
+// lado derecho 3D
+
+
+ctx.fillStyle="#333";
+
+
+
+ctx.beginPath();
+
+
+ctx.moveTo(
+x+ancho,
+y
+);
+
+
+ctx.lineTo(
+x+ancho+20,
+y+20
+);
+
+
+ctx.lineTo(
+x+ancho+20,
+y+alto+20
+);
+
+
+ctx.lineTo(
+x+ancho,
+y+alto
+);
+
+
+ctx.closePath();
+
+
+ctx.fill();
+
+
+
+
+
+
+
+
+
+// barra principal
+
+
+ctx.fillStyle="#1976d2";
+
+
+ctx.fillRect(
+x,
+y,
+ancho,
+alto
+);
+
+
+
+
+
+
+
+// cantidad
+
+
+ctx.fillStyle="black";
+
+
+ctx.fillText(
+d.valor,
+x+ancho+30,
+y+35
+);
+
+
+
+
+
+});
+
+
+
+
+
+}
+
+
+
+
+
+dibujar();
+
+
+
+</script>
+
+
+
+
+
+
+
+</body>
+
+
+</html>
